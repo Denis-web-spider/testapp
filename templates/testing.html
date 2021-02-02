@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="{% url 'testing' test.pk question_number|add:'1' %}" method="post">
+    {% csrf_token %}
+    <div class="row mt-3">
+        <div class="col text-center">
+            <p>{{question_number}}/{{question_count}}</p>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col text-center">
+            <p>{{question.question_text}}</p>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col text-center">
+            {% for answer in answers %}
+                <input class="form-check-input" type="radio" id="{{forloop.counter}}" name="answer" value="{{answer.pk}}">
+                <label class="form-check-label" for="{{forloop.counter}}">{{answer.answer_text}}</label>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col text-center">
+            {% if question_number < question_count %}
+                <button class="btn btn-outline-dark btn-lg" type="submit">Далее</button>
+            {% else %}
+                <button class="btn btn-outline-dark btn-lg" type="submit">Завершить</button>
+                <input type="hidden" name="last_question" value="True">
+            {% endif %}
+        </div>
+        <input type="hidden" name="current_question" value="{{question_number|add:'1'}}">
+    </div>
+</form>
+{% endblock %}
